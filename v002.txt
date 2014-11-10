@@ -1,0 +1,415 @@
+#! /usr/bin/env python
+
+# Created by David Millar
+# Created August 4, 2007
+# Last Modified August 6, 2007
+# Version .002
+
+import random
+
+# Scene Class - A scene is usually a room but can also be an event.
+class Scene:
+    # Initiation Function
+    # Note:      Destination scene number is based on order of list (map) - self.num is just a duplicate for reference.
+    # --------------------------------------------------------------------------------------------------------------------------
+    # Usage:     variable = Scene(This#, {'DIRECTION':Destination#}, "Room or scene text.",0 or 1 if action)
+    # Example:   myroom = Scene(315, {'SOUTH':300}, "My dorm room. It's full of old pizza boxes and mountain dew cans.",1)
+    def __init__(self, num, opts, desc, action):
+        self.num = num
+        self.description = desc
+        self.opts = opts
+        self.action = action
+    # Display Scene and Options
+    def print_info(self):
+        print ""
+        print self.description.replace('$name',playername)
+        print "Choices:",
+        for dir in self.opts.keys():
+            print dir,
+        print "HELP"
+    # Add or Remove an Options
+    def add_opt(self, name, num):
+        self.opts[name] = num
+    def rem_opt(self, name):
+        del self.opts[name]
+
+# Choosing an Option from the Scene
+def choice(Cs, Opt):
+    if Opt == "EXIT":
+        print ""
+        print "Thanks for playing!"
+        print ""
+        return -1
+    elif Opt == "HELP":
+        print ""
+        print "To play, just use commands given to you and strive to mix the best coffee drinks possible. Shortcuts are available to make gameplay and replay more convenient."
+        print "Shortcuts:"
+        abbrs = abbr.keys()
+        abbrs.sort()
+        for ab in abbrs:
+            print ab, "|", abbr[ab]
+        return Cs.num
+    elif Opt == "RECIPES":
+        recipebook()
+        return Cs.num
+    elif Opt == "INVENTORY":
+        show_inv()
+        return Cs.num
+    elif Opt == "MIX":
+        mix_drink()
+        return Cs.num
+    elif Opt == "MORTAL KOMBAT":
+        print ""
+        print "You attack with Whipped Cream: you damage for 14 hit points"
+        return Cs.num
+    elif Cs.opts.has_key(Opt):
+        newnum = Cs.opts[Opt]
+        ns = map[newnum]
+        if ns.action == 1:
+            moreaction(newnum)
+        return newnum
+    elif 1:
+        print "That command sucked. Are you on decaf?"
+        return Cs.num
+
+# Recipe Book Function
+def recipebook():
+    print ""
+    print "You open your recipe book to the table of contents. What recipe are you looking for?"
+    lookup = get_input(1)
+    print ""
+    if lookup == "RANDOM" or lookup == "ANY":
+        lookup = random.choice(book.keys())
+    elif lookup == "COVER":
+        print "You close the book and stare dumbly at the cover, sideways:"
+        print " ,---------. "
+        print " ||    __  | "
+        print " || ~()__) | "
+        print " ||    U   | "
+        print " `---------' "
+        return
+    elif lookup == "TOC":
+        print "You glance over the table of contents. You have recipes for the following:"
+        b = book.keys()
+        b.sort()
+        for r in b:
+            print "*",r,
+        print "*"
+        return
+    elif lookup == "SYRUP":
+        print "* SYRUP *"
+        print "* SYRUP is an interesting drink. When mixing CANDY and WATER, you get SYRUP, but there are various types of SYRUP you can get. Sometimes it's a simple sugar syrup that dries to normal SUGAR, and sometimes you will get a flavored SYRUP. To make matters worse, you sometimes even get additional things like NUTS and SPRINKLES from mixing a SYRUP. Try it!"
+        return
+    elif book.has_key(lookup) == 0:
+        print "You thumb through the book but can't find the recipe. Maybe you'll find it and add it to the book later?"
+        return
+    recipe = book[lookup]
+    print "*",lookup,"*"
+    print "*",lookup,"is a ",skill[recipe[0]-1],
+    print "drink to make. To make it, first you must load up your blender with",
+    print recipe[1] + ". Then you must add",recipe[2],
+    print "to the blender. Finally, press the button on the blender, and there you go! A deliciouse batch of",
+    print lookup,"for you and your friends!"
+
+# Mix a Drink
+def mix_drink():
+    print ""
+    print "What drink would you like to make?"
+    dname = get_input(1)
+    print ""
+    if dname == "CRAPPUCCINO":
+        print "You're already full of COFFEE, MILK, and CRAP. You're so full of CRAP I don't think you need more CRAP."
+    elif book.has_key(dname) == 0:
+        print "You don't seem to know how to make a",dname,"but maybe you'll learn later. Or maybe not."
+    elif 1:
+        recipe = book[dname]
+        if inventory.has_key(recipe[1]) == 0 or inventory.has_key(recipe[2]) == 0:
+            print "You don't seem to have the proper ingredients for a",dname,"- please consult your inventory and recipe book for details."
+        else:
+            rem_item(recipe[1],1)
+            rem_item(recipe[2],1)
+            if dname == "SYRUP":
+                stype = random.choice(syrups)
+                add_item(stype,1)
+                r = random.randint(1,5)
+                s = random.randint(1,3)
+                if r == 4:
+                    add_item('NUTS',s)
+                elif r == 5:
+                    add_item('SPRINKLES',s)
+                print "With the whir of your blender, your",recipe[1],"and",recipe[2],"unloaded hell on your inventory."
+            else:
+                add_item(dname,1)
+                print "With the whir of your blender, your",recipe[1],"and",recipe[2],"become a tasty",dname,"which is now in your inventory."
+
+# Add Recipe to Book
+def add_recipe(name, firIn, secIn, diff):
+    if book.has_key(name) == False:
+        book[name]=[diff,firIn,secIn]
+
+############################################################################
+# More Actions
+def moreaction(thescene):
+    if thescene == 3:
+        if event[1] == 0:
+            global choins
+            choins = choins - 10
+            add_item("BEAN",1)
+            map[2].add_opt("NORTH",4)
+            map[2].description = "You are just outside a nasty looking movie theatre. Shady Latin gang members have a shell game set up nearby, and from previous experiences you know to avoid gambling like the plague."
+            event[1] = 1
+        elif event[1] == 1:
+            map[3].description = "You walk up to the gangsters and the boss guy says 'Get lost, fool!'"
+            event[1] = 2
+        elif event[1] == 3:
+            map[3].description = "..."
+            if (inventory.has_key("ARMONDO'S NOTE") == 0):
+                print ""
+                print "You walk up to the gangsters and flash a picture of Candy in front of them. 'Woah, is that Candy?' the boos guy asks. I ain't seen her since high school!' He scribbles something on the back of a receipt for frozen wonton burrito meals, and you do the math and realize that he wants you to give candy the number."
+                add_item("ARMONDO'S NOTE",1)
+        elif event[1] == 4:
+            print ""
+            print "You see Candy with Armondo, and they wave you over. 'Hey, thanks for hooking us up again! And sorry Armondo took your choins in his little game, teehee!' She hands you 5 choins. 'Uhh, he took 10 choins from me, not fi-' 'SHUT UP RUBE!' Candy laughs at Armondo and kisses him on the cheek. 'We're going to the back seat of Armondo's car for coffee. See ya! They walk away and get into Armondo's car, which starts bucking around a bit. Then it suddenly starts up and leaves, opening the street to the south."
+            choins = choins + 5
+            map[2].rem_opt("TALK")
+            map[2].add_opt("SOUTH",15)
+    elif thescene == 6:
+        map[5].rem_opt("EAST")
+        add_recipe('ICED COFFEE','COFFEE','ICE',1)
+        add_recipe('ESPRESSO','COFFEE','BEAN',2)
+        add_recipe('CAPPUCCINO','ESPRESSO','MILK',2)
+        add_recipe('CREAMY COFFEE','COFFEE','MILK',1)
+    elif thescene == 8:
+        if event[1] >= 3 and (book.has_key("SYRUP") == 0):
+            print ""
+            print "'PROTIP!' 'Huh?' you respond. 'PROTIP! CANDY and WATER make various sugary SYRUPS to add to your drinks!' Wow. Interesting."
+            add_recipe('SYRUP','CANDY','WATER',1)
+        disp_menu(0)
+    elif thescene == 11:
+        if event[0] == 0:
+            print ""
+            print "You ask the farmer's wife what's going on, and she explains that her husband is severely exhausted. 'I would let him just get his sleep, but I'm a cruel woman and these cows need to be tended to. Can you get my husband something strong to drink so he can start selling milk again? If you need supplies, try the coffee shop in town.'"
+            event[0] = 1
+            map[5].add_opt("WEST",7)
+        elif event[0] == 1:
+            if inventory.has_key("ESPRESSO"):
+                print ""
+                print "'Ah, that ESPRESSO will do the trick!' The wife promptly takes the high powered shot of coffee and jams it down Farmer Brown's throat. He waks up INSTANTLY. 'Thanks for waking up my good for nothing husband. Here's some milk for your trouble. Come back soon and buy some more if you like it!'"
+                map[11].description = "The farmer's wife stands around impatiently. Impatiently and angrily. But she has product to sell, so you ought to buy some."
+                add_item("MILK",3)
+                rem_item("ESPRESSO",1)
+                event[0] = 2
+            else:
+                print ""
+                print "'I don't think you have anything strong enough, kiddo. Come back with something high powered, like something that begins with E and ends with SPRESSO.'"
+        elif 1:
+             disp_menu(1)
+    elif thescene == 14:
+        if event[1] <= 1:
+            event[1] = 3
+            add_item("CANDY",1)
+        elif event[1] == 3:
+            if inventory.has_key("ARMONDO'S NOTE"):
+                print ""
+                print "'Armondo? NO WAY! I remember how cute he was! I'm definitely gonna go see him! Thanks, and have some more candy!' She runs out and never looks back."
+                pieces = random.randint(5,7)
+                add_item("CANDY",pieces)
+                event[1] = 4
+                map[14].description = "..."
+                map[13].rem_opt("TALK")
+            else:
+                map[14].description = "'You gonna find a guy for me honey?' Candy asks. You see the look of desperation in her eyes and decide to leave."
+#######################################################################
+
+# Display Menu
+def disp_menu(num):
+    print ""
+    print "Here's Our Menu:"
+    menuitems = menus[num]
+    blist = menuitems.keys()
+    blist.sort()
+    for key in blist:
+        b = menuitems[key]
+        print key + ".",
+        print b[1],"x",
+        print str(b[2]).ljust(20),
+        print str(b[0]).rjust(3) + "ch"
+    print "Choose X to Quit"
+    order = get_input(1)
+    menu_order(num,order)
+
+# Order Something
+def menu_order(num,item):
+    curmenu = menus[num]
+    print ""
+    if item == "X":
+        return
+    elif curmenu.has_key(item):
+        global choins
+        if curmenu[item][0] <= choins:
+            choins = choins - curmenu[item][0]
+            add_item(curmenu[item][2],curmenu[item][1])
+            print "Hope you're happy with the",curmenu[item][2],"man."
+        else:
+            print "You can't seem to afford that",curmenu[item][2],"man."
+    elif 1:
+        print "I don't know what you tried to order, but can I order a double cheeseburger?"
+        # I was hungry for a cheeseburger when I wrote that line of code
+    print "Anything else? (Y/N)"
+    if get_input(1) == "Y":
+        print ""
+        print "What else would you like?"
+        order = get_input(1)
+        menu_order(num,order)
+
+# Show Inventory
+def show_inv():
+    print ""
+    print "You have the following items in your sack:"
+    print "TRUSTY MINI BLENDER"
+    for i in inventory.keys():
+        print i,"X",inventory[i]
+    print "CHOINS X",choins
+
+# Add Item
+def add_item(i,n):
+    if inventory.has_key(i):
+        inventory[i] = inventory[i] + n
+    else:
+        inventory[i] = n
+
+# Take Item
+def rem_item(i,n):
+    inventory[i] = inventory[i] - n
+    if inventory[i] <= 0:
+        del inventory[i]
+
+# Get Valid Input
+def get_input(case):
+    tmp = ""
+    while tmp == "":
+        tmp = raw_input("--> ")
+    if case == 1:
+        tmp = to_upper(tmp)
+    return tmp
+
+# Converts a string to upper case
+def to_upper(string):
+    upper_case = ""
+    for character in string:
+        if 'a' <= character <= 'z':
+            location = ord(character) - ord('a')
+            new_ascii = location + ord('A')
+            character = chr(new_ascii)
+        upper_case = upper_case + character
+    return upper_case
+
+# The Map of the Game
+map = [Scene(0,{'NORTH':1},"You are in a friggen bathroom at the movie theatre. It smells like nasty, evil stuff in here. It's so, so, so gross. Worst hell hole you ever saw.",0),
+       Scene(1,{'SOUTH':0, 'EAST':2},"You are in the lobby of the nasty movie theatre. The stench from the mens' room invades the air rendering the smells of popcorn and snacks useless.",0),
+       Scene(2,{'WEST':1,'TALK':3},"You are just outside a nasty looking movie theatre. Shady characters lurk nearby. The characters happen to be three Latin gang member types who have set up some kind of betting game. The boss of the operation has the typical machismo image - he's bald, has a cheap cigar hanging out of his mouth off to one side and he has gold chains that swing as he turns to you and asks if you want to play a game.",0),
+       Scene(3,{'BACK':2},"Macho Man says 'Alright, hand over 10 choins.' 'Choins?' you ask. 'Yeah, choins. The H is invisible like how in some words letters are silent. Didn't you go to public school?' You hand over the choins and he places a bean under one of three cups. After some sliding around with the cups, you successfully fail at correctly picking the right cup. 'Here kid,' the guy says as he hands you the bean. 'Consolation prize.' The street to the north suddenly becomes unblocked and the gangsters tell you to get lost.",1),
+       Scene(4,{'NORTH':5, 'SOUTH':2, 'EAST':12},"You're on a street downtown. Everything is kinda dirty and creepy around here. It's not an ideal situation and you want to get out of there fast.",1),
+       Scene(5,{'SOUTH':4, 'EAST':6, 'NORTH':9},"You're on a dirty street downtown. The public library is on the east side of the street. Hustling and bustling people go in and out of various buildings, mostly shops, while others walk up and down the street.",0),
+       Scene(6,{'WEST':5},"You're inside the public library. Notices all over warn that the library will be closing shortly for a long-term renovation plan and explain some mumbo jumbo about inter library loans. In the short amount of time you have, you copy down some coffee recipes from a book in the nonfiction section.",1),
+       Scene(7,{'EAST':5, 'ORDER':8},"You're in a trendy but old looking coffee shop. It's not the kind of coffee shop that posers would know about - only the social outcasts and those in the 'know' would find it. The old-school wooden bar is rough but polished. Behind the bar sits shelves of various flavored syrups and powders for coffee drinks. A couple people sit alone at small tables with their laptops while a few groups of people sit together and chat at wall or corner tables.",0),
+       Scene(8,{'BACK':7},"You finish up your order and get ready to be on your way.",1),
+       Scene(9,{'SOUTH':5, 'EAST':10},"You're on a street near the edge of the downtown area. Shops are starting to thin out into a typical neighborhood where people live.",0),
+       Scene(10,{'WEST':9,'TALK':11},"You're in the backyard of a home in the middle of the city. A farmer type guy is half asleep and his wife is standing near him over by the fence. Cows graze in the patchy yard.",0),
+       Scene(11,{'BACK':10},"The farmer's wife stands around impatiently. Impatiently and angrily.",1),
+       Scene(12,{'WEST':4, 'NORTH':13},"You're downtown in the red light district. The red light as stopped traffic, but you;re on foot, so you can visit plenty of the fine local establishments.",0),
+       Scene(13,{'SOUTH':12, 'TALK':14},"You're in a strip club. It's not very lively - it's probably the wrong time of day for serious stripping to go on. One of the strippers is sitting at a booth drinking something.",0),
+       Scene(14,{'BACK':13},"'Hey, my name is Candy. Here, have a piece of candy. I Like shaking my stuff and giving out candy. But I really wish I could find a sweet guy so I can stop stripping. Let me know if you find a decent guy. I don't want a thug or a gangster or anything...",1),
+       Scene(15,{'NORTH':2},"You're in the south part of downtown. It's starting to fade from the ghetto to the preppy rich kid part. You shudder involuntarily.",0),
+       Scene(16,{},"",0),
+       Scene(17,{},"",0),
+       Scene(18,{},"",0),
+       Scene(19,{},"",0),
+       Scene(20,{},"",0),
+       Scene(21,{},"",0),
+       Scene(22,{},"",0),
+       Scene(23,{},"",0),
+       Scene(24,{},"",0),
+       Scene(25,{},"",0),
+       Scene(26,{},"",0),
+       Scene(27,{},"",0),
+       Scene(28,{},"",0),
+       Scene(29,{},"",0),
+       Scene(30,{},"",0),
+       Scene(31,{},"",0)]
+
+# Storyline yet to be implemented:
+# - ???
+# - Unlock Sewer Area
+# - Concoct Ultimate Caffiene Drink (difficult)
+# - Use U.C.D. to save Donut King
+# - Name the UCD
+# - Win Golden Donut (ASCII Certificate)
+
+# Initializing the Game
+gameover = 0
+CurSceneNum = 0
+CurScene = map[CurSceneNum]
+
+# Event List:
+#   0: Farmer Brown    1: Shell Game/Date
+event = [0,0]
+
+# Abbreviations
+abbr = {'N':'NORTH','E':'EAST','W':'WEST','S':'SOUTH',
+'U':'UP', 'D':'DOWN','B':'BACK',
+'H':'HELP','X':'EXIT','?':'HELP',
+'R':'RECIPES','I':'INVENTORY','M':'MIX',
+'T':'TALK','O':'ORDER'}
+
+# Inventory and Recipe Book
+global inventory
+inventory = {'WATER':5}
+global choins
+choins = 50
+global book
+book = {'COFFEE':[1,'BEAN','WATER']}
+global skill
+skill = ['pretty easy','medium level','quite hard','really epic']
+
+# Syrup Types and Such
+global syrups
+syrups = ['CARAMEL SYRUP','CINNAMON SYRUP','BERRY SYRUP','SUGAR']
+
+# Menus In Game
+global menus
+menus = [{'A':[8,1,'COFFEE'],'B':[3,1,'ICE'],'C':[6,1,'BEAN'],'D':[15,3,'BEAN']},
+{'A':[10,1,'MILK'],'B':[15,1,'CREAM']}]
+
+# GAME START!!!!!
+print "You might think youre an ordinary person."
+print "But you're not."
+print "YOU ARE A COFFEE WARRIOR!"
+print "AND YOUR NAME IS..."
+print ""
+print "Err... what is your name again?"
+global playername
+playername = get_input(0)
+print ""
+print "YOUR NAME IS", to_upper(playername) + "!"
+print "...and you're about to wake up in the bathroom of a strange movie theater with a horrible hangover. Cheers!"
+
+# Main Loop for the Game
+while gameover == 0:
+    # Room Desc
+    CurScene.print_info()
+
+    # Input
+    command = get_input(1)
+    if len(command) == 1 and abbr.has_key(command):
+        command = abbr[command]
+    CurSceneNum = choice(CurScene, command)
+    if CurSceneNum == -1:
+        gameover = 1
+    else:
+        CurScene = map[CurSceneNum]
+    r = random.randint(1,5)
+    if r == 5:
+        print ""
+        print "You find a choin on the ground! Lucky..."
+        choins = choins + 1

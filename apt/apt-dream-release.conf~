@@ -1,0 +1,7 @@
+APT::FTPArchive::Release::Origin "David Millar";
+APT::FTPArchive::Release::Label "Coffee Game";
+APT::FTPArchive::Release::Suite "unstable";
+APT::FTPArchive::Release::Codename "dream";
+APT::FTPArchive::Release::Architectures "all";
+APT::FTPArchive::Release::Components "main";
+APT::FTPArchive::Release::Description "The repository for the Coffee Game.";

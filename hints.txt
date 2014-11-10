@@ -1,0 +1,68 @@
+Quest Guide
+
+Farmer Brown Quest
+------------------
+Requires:
+- library recipes
+- espresso ingredients
+Unlocks:
+- coffee shop A
+Rewards:
+- milk
+
+Matchmaker Quest
+----------------
+Requires:
+- n/a
+Unlocks:
+- Girlfriend's Apartment
+- Landon's Place (req Kid Quest)
+- Store menu at theatre snack bar
+Rewards:
+- 6-8 candy
+- 5 choins
+
+Girlfriend Quest
+----------------
+Requires:
+- brazilian carwash ingredients
+- syrup drink recipes
+- basic syrup recipe
+- library recipes
+Unlocks:
+- Selling syrup drinks randomly
+
+Kid Quest
+---------
+Requires:
+- library recipes
+- espresso ingredients
+Unlocks:
+- Landon's Place
+- Cabin
+- Kid can attack at random times now
+
+Telescope Game
+--------------
+Requires:
+- n/a
+Unlocks:
+- Truck stop
+
+Coffee Jerk Quest
+-----------------
+Requires:
+- medium recipes
+- library recipes
+Unlocks:
+- Talk to guy
+Rewards:
+- 35-65 choins
+- mocha
+
+Railroad Quest
+--------------
+Requires:
+- rail map
+Unlocks:
+- rail cart to next town

@@ -1,0 +1,3 @@
+#!/bin/sh
+apt-ftparchive generate apt-ftparchive.conf
+apt-ftparchive -c apt-sarge-release.conf release dists/sarge/ >dists/sarge/Release

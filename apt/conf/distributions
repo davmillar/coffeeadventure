@@ -1,0 +1,7 @@
+Origin: David Millar
+Label: Coffee Game
+Suite: unstable
+Codename: dream
+Architectures: i386
+Components: main
+Description: The repository for the Coffee Game.

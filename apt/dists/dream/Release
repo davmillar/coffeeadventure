@@ -1,0 +1,12 @@
+Origin: David Millar
+Label: Coffee Game
+Suite: unstable
+Codename: dream
+Date: Sun, 07 Oct 2007 22:00:52 +0000
+Architectures: i386
+Components: main
+Description: The repository for the Coffee Game.
+MD5Sum:
+ 19223649b0367f7675ce945930b89323 684 main/binary-i386/Packages
+ fe73ad02446346f1c8454aaf340061bd 420 main/binary-i386/Packages.gz
+ 6c5fb655577e10555049ce4d6b89d51d 142 main/binary-i386/Release

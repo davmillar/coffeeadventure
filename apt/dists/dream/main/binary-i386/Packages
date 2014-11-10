@@ -1,0 +1,15 @@
+Package: coffeeadventure
+Version: 0.101-2
+Architecture: all
+Essential: no
+Depends: python, python2.5
+Installed-Size: 82
+Maintainer: David Millar [davmillar@gmail.com]
+Priority: optional
+Section: games
+Filename: pool/main/c/coffeeadventure/coffeeadventure_0.101-2_all.deb
+Size: 30200
+MD5sum: ed30f1a5c995d313336b9431bad15dae
+Description: A text adventure where you make coffee and try to get home.
+ A Python-based text adventure where the main character goes through several towns to make coffee and get home. Uses many of the basic commands that older text adventures use but includes several commands specific to the game. Use the in-game help in order to learn about the commands.
+
